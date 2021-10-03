@@ -4,7 +4,6 @@ package dnsProto
 
 import (
 	context "context"
-	empty "github.com/golang/protobuf/ptypes/empty"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -19,7 +18,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DomainAddressClient interface {
-	Save(ctx context.Context, in *NewDomainAddress, opts ...grpc.CallOption) (*empty.Empty, error)
+	Save(ctx context.Context, in *NewDomainAddress, opts ...grpc.CallOption) (*Address, error)
 	Get(ctx context.Context, in *Domain, opts ...grpc.CallOption) (*Address, error)
 }
 
@@ -31,8 +30,8 @@ func NewDomainAddressClient(cc grpc.ClientConnInterface) DomainAddressClient {
 	return &domainAddressClient{cc}
 }
 
-func (c *domainAddressClient) Save(ctx context.Context, in *NewDomainAddress, opts ...grpc.CallOption) (*empty.Empty, error) {
-	out := new(empty.Empty)
+func (c *domainAddressClient) Save(ctx context.Context, in *NewDomainAddress, opts ...grpc.CallOption) (*Address, error) {
+	out := new(Address)
 	err := c.cc.Invoke(ctx, "/dnsProto.DomainAddress/Save", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -53,7 +52,7 @@ func (c *domainAddressClient) Get(ctx context.Context, in *Domain, opts ...grpc.
 // All implementations must embed UnimplementedDomainAddressServer
 // for forward compatibility
 type DomainAddressServer interface {
-	Save(context.Context, *NewDomainAddress) (*empty.Empty, error)
+	Save(context.Context, *NewDomainAddress) (*Address, error)
 	Get(context.Context, *Domain) (*Address, error)
 	mustEmbedUnimplementedDomainAddressServer()
 }
@@ -62,7 +61,7 @@ type DomainAddressServer interface {
 type UnimplementedDomainAddressServer struct {
 }
 
-func (UnimplementedDomainAddressServer) Save(context.Context, *NewDomainAddress) (*empty.Empty, error) {
+func (UnimplementedDomainAddressServer) Save(context.Context, *NewDomainAddress) (*Address, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Save not implemented")
 }
 func (UnimplementedDomainAddressServer) Get(context.Context, *Domain) (*Address, error) {
