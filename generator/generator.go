@@ -12,7 +12,7 @@ import (
   "time"
 )
 
-const nRecords = 10000
+const targetDir = "../generated"
 
 type record struct {
   Domain string `json:"domain"`
@@ -61,7 +61,20 @@ func check(err error) {
 }
 
 func main() {
-    file, err := os.Create(fmt.Sprintf("../generated/%d-lines.json", nRecords))
+    nRecords, err := strconv.Atoi(os.Args[1])
+    if err != nil {
+        log.Print("could get the file size")
+        log.Fatal(err)
+    }
+    if _, err := os.Stat(targetDir); os.IsNotExist(err) {
+        if err := os.Mkdir(targetDir, 0755); err != nil {
+            log.Fatal(err)
+        }
+    }
+
+    fName := fmt.Sprintf("%s/%d-lines.json", targetDir, nRecords)
+
+    file, err := os.Create(fName)
     defer file.Close()
     check(err)
     w := bufio.NewWriter(file)
@@ -70,7 +83,7 @@ func main() {
     
     for i := 0; i < nRecords; i++ {
       jBytes, err := json.Marshal(generateRecord(i))
-      fmt.Println(i)
+      fmt.Printf("\r%d/%d", i + 1, nRecords)
       check(err)
       _, err = w.Write(jBytes)
       check(err)
@@ -79,10 +92,15 @@ func main() {
         check(err)
       }
     }
-
-    fmt.Println("DONE")
     
     _, err = w.WriteRune(']')
     check(err)
     w.Flush()
+
+    f, err := os.Stat(fName)
+    if err != nil {
+        fmt.Printf("\nDONE.")
+    } else {
+        fmt.Printf("\nDONE. File size: %dMB", f.Size() / 1e6)
+    }
 }

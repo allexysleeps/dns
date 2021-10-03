@@ -1,8 +1,8 @@
-package jsonStreamParse
+package parser
 
 import (
-  "dns-api/shared"
   "encoding/json"
+  "github.com/allexysleeps/dns/dns-api/shared"
   "io"
   "log"
 )

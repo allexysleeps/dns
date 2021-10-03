@@ -1,0 +1,23 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+package dnsProto;
+
+option go_package = "github.com/allexysleeps/dns/proto;dnsProto";
+
+service DomainAddress {
+  rpc Save(NewDomainAddress) returns (google.protobuf.Empty) {}
+  rpc Get(Domain) returns (Address) {}
+}
+
+message NewDomainAddress {
+  string domain = 1;
+  string address = 2;
+}
+
+message Address {
+  string address = 1;
+}
+
+message Domain {
+  string domain = 1;
+}
