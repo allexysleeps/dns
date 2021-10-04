@@ -4,3 +4,11 @@ services:
     image: "redis:alpine"
     ports:
       - "6379:6379"
+  dns-storage:
+    image: "dns-storage:latest"
+    ports:
+      - "50051:50051"
+  dns-api:
+    image: "dns-api"
+    ports:
+      - "8080:8080"

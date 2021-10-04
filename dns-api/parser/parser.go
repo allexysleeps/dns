@@ -2,28 +2,36 @@ package parser
 
 import (
   "encoding/json"
-  "github.com/allexysleeps/dns/dns-api/shared"
+  "errors"
   "io"
-  "log"
 )
 
-func Parse(input *io.Reader, records chan<- shared.Record) {
-  dec := json.NewDecoder(*input)
+type Record struct {
+  Domain, Ip string
+  Port int
+}
+
+var parsingError = errors.New("couldn't parse JSON")
+
+func Parse(input io.Reader, records chan<- Record) error {
+  defer close(records)
+  dec := json.NewDecoder(input)
   _, err := dec.Token()
   if err != nil {
-    log.Fatal(err)
+    return parsingError
   }
   for dec.More() {
-    var r shared.Record
+    var r Record
     err := dec.Decode(&r)
     if err != nil {
-      log.Fatal(err)
+      return parsingError
     }
     records <- r
   }
-  close(records)
+  
   _, err = dec.Token()
   if err != nil {
-    log.Fatal(err)
+    return parsingError
   }
+  return nil
 }

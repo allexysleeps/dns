@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	pb "github.com/allexysleeps/dns/dns-proto"
-	database "github.com/allexysleeps/dns/domain-address/db"
+	database "github.com/allexysleeps/dns/dns-storage/storage"
 	"google.golang.org/grpc"
 	"log"
 	"net"
@@ -35,7 +35,7 @@ func (s *DomainAddressServer) Get(ctx context.Context, in *pb.Domain) (*pb.Addre
 }
 
 func main() {
-	lis, err := net.Listen("tcp", "localhost:50051")
+	lis, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
