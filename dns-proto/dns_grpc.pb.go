@@ -14,122 +14,122 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// DomainAddressClient is the client API for DomainAddress service.
+// DnsStorageClient is the client API for DnsStorage service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type DomainAddressClient interface {
-	Save(ctx context.Context, in *NewDomainAddress, opts ...grpc.CallOption) (*Address, error)
-	Get(ctx context.Context, in *Domain, opts ...grpc.CallOption) (*Address, error)
+type DnsStorageClient interface {
+	SaveDomainAddress(ctx context.Context, in *NewDomainAddress, opts ...grpc.CallOption) (*Address, error)
+	GetDomainAddress(ctx context.Context, in *Domain, opts ...grpc.CallOption) (*Address, error)
 }
 
-type domainAddressClient struct {
+type dnsStorageClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewDomainAddressClient(cc grpc.ClientConnInterface) DomainAddressClient {
-	return &domainAddressClient{cc}
+func NewDnsStorageClient(cc grpc.ClientConnInterface) DnsStorageClient {
+	return &dnsStorageClient{cc}
 }
 
-func (c *domainAddressClient) Save(ctx context.Context, in *NewDomainAddress, opts ...grpc.CallOption) (*Address, error) {
+func (c *dnsStorageClient) SaveDomainAddress(ctx context.Context, in *NewDomainAddress, opts ...grpc.CallOption) (*Address, error) {
 	out := new(Address)
-	err := c.cc.Invoke(ctx, "/dnsProto.DomainAddress/Save", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/dnsProto.DnsStorage/SaveDomainAddress", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *domainAddressClient) Get(ctx context.Context, in *Domain, opts ...grpc.CallOption) (*Address, error) {
+func (c *dnsStorageClient) GetDomainAddress(ctx context.Context, in *Domain, opts ...grpc.CallOption) (*Address, error) {
 	out := new(Address)
-	err := c.cc.Invoke(ctx, "/dnsProto.DomainAddress/Get", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/dnsProto.DnsStorage/GetDomainAddress", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// DomainAddressServer is the server API for DomainAddress service.
-// All implementations must embed UnimplementedDomainAddressServer
+// DnsStorageServer is the server API for DnsStorage service.
+// All implementations must embed UnimplementedDnsStorageServer
 // for forward compatibility
-type DomainAddressServer interface {
-	Save(context.Context, *NewDomainAddress) (*Address, error)
-	Get(context.Context, *Domain) (*Address, error)
-	mustEmbedUnimplementedDomainAddressServer()
+type DnsStorageServer interface {
+	SaveDomainAddress(context.Context, *NewDomainAddress) (*Address, error)
+	GetDomainAddress(context.Context, *Domain) (*Address, error)
+	mustEmbedUnimplementedDnsStorageServer()
 }
 
-// UnimplementedDomainAddressServer must be embedded to have forward compatible implementations.
-type UnimplementedDomainAddressServer struct {
+// UnimplementedDnsStorageServer must be embedded to have forward compatible implementations.
+type UnimplementedDnsStorageServer struct {
 }
 
-func (UnimplementedDomainAddressServer) Save(context.Context, *NewDomainAddress) (*Address, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Save not implemented")
+func (UnimplementedDnsStorageServer) SaveDomainAddress(context.Context, *NewDomainAddress) (*Address, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveDomainAddress not implemented")
 }
-func (UnimplementedDomainAddressServer) Get(context.Context, *Domain) (*Address, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+func (UnimplementedDnsStorageServer) GetDomainAddress(context.Context, *Domain) (*Address, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetDomainAddress not implemented")
 }
-func (UnimplementedDomainAddressServer) mustEmbedUnimplementedDomainAddressServer() {}
+func (UnimplementedDnsStorageServer) mustEmbedUnimplementedDnsStorageServer() {}
 
-// UnsafeDomainAddressServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to DomainAddressServer will
+// UnsafeDnsStorageServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to DnsStorageServer will
 // result in compilation errors.
-type UnsafeDomainAddressServer interface {
-	mustEmbedUnimplementedDomainAddressServer()
+type UnsafeDnsStorageServer interface {
+	mustEmbedUnimplementedDnsStorageServer()
 }
 
-func RegisterDomainAddressServer(s grpc.ServiceRegistrar, srv DomainAddressServer) {
-	s.RegisterService(&DomainAddress_ServiceDesc, srv)
+func RegisterDnsStorageServer(s grpc.ServiceRegistrar, srv DnsStorageServer) {
+	s.RegisterService(&DnsStorage_ServiceDesc, srv)
 }
 
-func _DomainAddress_Save_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _DnsStorage_SaveDomainAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(NewDomainAddress)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DomainAddressServer).Save(ctx, in)
+		return srv.(DnsStorageServer).SaveDomainAddress(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/dnsProto.DomainAddress/Save",
+		FullMethod: "/dnsProto.DnsStorage/SaveDomainAddress",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DomainAddressServer).Save(ctx, req.(*NewDomainAddress))
+		return srv.(DnsStorageServer).SaveDomainAddress(ctx, req.(*NewDomainAddress))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _DomainAddress_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _DnsStorage_GetDomainAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Domain)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DomainAddressServer).Get(ctx, in)
+		return srv.(DnsStorageServer).GetDomainAddress(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/dnsProto.DomainAddress/Get",
+		FullMethod: "/dnsProto.DnsStorage/GetDomainAddress",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DomainAddressServer).Get(ctx, req.(*Domain))
+		return srv.(DnsStorageServer).GetDomainAddress(ctx, req.(*Domain))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// DomainAddress_ServiceDesc is the grpc.ServiceDesc for DomainAddress service.
+// DnsStorage_ServiceDesc is the grpc.ServiceDesc for DnsStorage service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var DomainAddress_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "dnsProto.DomainAddress",
-	HandlerType: (*DomainAddressServer)(nil),
+var DnsStorage_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "dnsProto.DnsStorage",
+	HandlerType: (*DnsStorageServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Save",
-			Handler:    _DomainAddress_Save_Handler,
+			MethodName: "SaveDomainAddress",
+			Handler:    _DnsStorage_SaveDomainAddress_Handler,
 		},
 		{
-			MethodName: "Get",
-			Handler:    _DomainAddress_Get_Handler,
+			MethodName: "GetDomainAddress",
+			Handler:    _DnsStorage_GetDomainAddress_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

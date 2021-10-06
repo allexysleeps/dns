@@ -13,5 +13,3 @@ func Create() DB {
 	rdb := redisStorage.CreateRedisClient()
 	return rdb
 }
-
-

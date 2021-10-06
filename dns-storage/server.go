@@ -14,10 +14,10 @@ const port = ":50051"
 var db = database.Create()
 
 type DomainAddressServer struct {
-	pb.UnimplementedDomainAddressServer
+	pb.UnimplementedDnsStorageServer
 }
 
-func (s *DomainAddressServer) Save(ctx context.Context, in *pb.NewDomainAddress)(*pb.Address, error) {
+func (s *DomainAddressServer) Save(ctx context.Context, in *pb.NewDomainAddress) (*pb.Address, error) {
 	err := db.Set(in.Domain, in.Address)
 	if err != nil {
 		return nil, err
@@ -31,7 +31,7 @@ func (s *DomainAddressServer) Get(ctx context.Context, in *pb.Domain) (*pb.Addre
 	if err != nil {
 		return nil, nil
 	}
-	return &pb.Address{ Address: addr }, nil
+	return &pb.Address{Address: addr}, nil
 }
 
 func main() {
@@ -40,7 +40,7 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	s := grpc.NewServer()
-	pb.RegisterDomainAddressServer(s, &DomainAddressServer{})
+	pb.RegisterDnsStorageServer(s, &DomainAddressServer{})
 	log.Printf("server listening at %v", lis.Addr())
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)

@@ -4,9 +4,9 @@ package dnsProto;
 
 option go_package = "github.com/allexysleeps/dns/proto;dnsProto";
 
-service DomainAddress {
-  rpc Save(NewDomainAddress) returns (Address) {}
-  rpc Get(Domain) returns (Address) {}
+service DnsStorage {
+  rpc SaveDomainAddress(NewDomainAddress) returns (Address) {}
+  rpc GetDomainAddress(Domain) returns (Address) {}
 }
 
 message NewDomainAddress {
